@@ -29,10 +29,13 @@ public class CannonMovement : MonoBehaviour
 
     void Update()
     {
+        Debug.Log("Cannon Update running");
         elapsedTime += Time.deltaTime;
 
         float offsetAngle = center + amplitude * Mathf.Sin(elapsedTime * speedFactor);
 
         barrelTransform.localRotation = Quaternion.Euler(0f, 0f, baseAngle + offsetAngle);
+        elapsedTime += Time.deltaTime;
+        Debug.Log("timeScale: " + Time.timeScale + " | deltaTime: " + Time.deltaTime);
     }
 }

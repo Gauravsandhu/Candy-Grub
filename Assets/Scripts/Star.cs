@@ -1,17 +1,17 @@
 using System;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class Star : MonoBehaviour
 {
     public GameObject[] destination = new GameObject[3];
-    private static int i  = 0;
+    public static int i  = 0;
     
-
-    // Update is called once per frame
-    void Update()
+    void Start()
     {
-        
+        i = 0;
     }
+    
 
     void OnTriggerEnter2D(Collider2D other)
     {
