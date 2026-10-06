@@ -1,48 +1,40 @@
-using Unity.VisualScripting.Antlr3.Runtime;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+// Shared by the Main Menu scene and every level scene. Level-only panels are
+// optional so the same component works in both.
 public class MainMenu : MonoBehaviour
-
-
-
 {
-    private GameObject pauseMenu;
-    private GameObject levelFailMenu;
-    private GameObject levelCompleteMenu;
+    [SerializeField] private GameObject pauseMenu;
+    [SerializeField] private GameObject levelFailMenu;
+    [SerializeField] private GameObject levelCompleteMenu;
 
+    public bool IsLevelOver { get; private set; }
+    public bool IsPaused { get; private set; }
 
-    public LevelFail levelFailScript;
-
-
-
-
-    public void Awake()
+    void Awake()
     {
-        pauseMenu = GameObject.Find("PauseMenu");
-        levelFailMenu = GameObject.Find("LevelFailMenu");
-        levelCompleteMenu = GameObject.Find("LevelCompleteMenu");
-        pauseMenu.SetActive(false);
-        levelFailMenu.SetActive(false);
-        levelCompleteMenu.SetActive(false);
-        
-    }
+        if (pauseMenu == null) pauseMenu = GameObject.Find("PauseMenu");
+        if (levelFailMenu == null) levelFailMenu = GameObject.Find("LevelFailMenu");
+        if (levelCompleteMenu == null) levelCompleteMenu = GameObject.Find("LevelCompleteMenu");
 
-    public void Update()
-    {
-        if (levelFailScript.failed)
-        {
-            ShowLevelFailMenu();
-    
-        }
-       
-    }
-    public void PlayGame(int levelNumber)
-    {   
-        
+        SetPanelActive(pauseMenu, false);
+        SetPanelActive(levelFailMenu, false);
+        SetPanelActive(levelCompleteMenu, false);
 
-        SceneManager.LoadSceneAsync(levelNumber);
         Time.timeScale = 1f;
+    }
+
+    public void PlayGame(int levelNumber)
+    {
+        if (levelNumber < 0 || levelNumber >= SceneManager.sceneCountInBuildSettings)
+        {
+            Debug.LogWarning($"Scene index {levelNumber} is not in Build Settings.");
+            return;
+        }
+
+        Time.timeScale = 1f;
+        SceneManager.LoadSceneAsync(levelNumber);
     }
 
     public void QuitGame()
@@ -51,45 +43,63 @@ public class MainMenu : MonoBehaviour
     }
 
     public void RestartLevel()
-{
-    
-    Debug.Log("Restart pressed, timeScale before: " + Time.timeScale);
-    Time.timeScale = 1f;
-    Debug.Log("timeScale after: " + Time.timeScale);
-    SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);   
-}
-
-public void NextLevel()
-{
-    Time.timeScale = 1f;
-    SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex+1);    
-}
-
-
-public void PauseGame()
-{
-    Time.timeScale = 0f;
-    pauseMenu.SetActive(true);
-}
-
-public void ResumeGame()
-{
-    Time.timeScale = 1f;
-    pauseMenu.SetActive(false);
-}
-
-public void ShowLevelFailMenu()
     {
-        Time.timeScale = 0f;
-        levelFailMenu.SetActive(true);
-        levelFailScript.failed = false;
+        Time.timeScale = 1f;
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
-public void ShowLevelCompleteMenu()
-{
-    Time.timeScale = 0f;
-    levelCompleteMenu.SetActive(true); // add this field + Find/hide it in Awake like the others
-}
-    
+    public void NextLevel()
+    {
+        Time.timeScale = 1f;
+        int next = SceneManager.GetActiveScene().buildIndex + 1;
+        // After the last level, return to the main menu.
+        SceneManager.LoadScene(next < SceneManager.sceneCountInBuildSettings ? next : 0);
+    }
 
+    public void PauseGame()
+    {
+        if (IsLevelOver) return;
+
+        IsPaused = true;
+        Time.timeScale = 0f;
+        SetPanelActive(pauseMenu, true);
+    }
+
+    public void ResumeGame()
+    {
+        if (IsLevelOver) return;
+
+        IsPaused = false;
+        Time.timeScale = 1f;
+        SetPanelActive(pauseMenu, false);
+    }
+
+    public void ShowLevelFailMenu()
+    {
+        if (!EndLevel()) return;
+        SetPanelActive(levelFailMenu, true);
+    }
+
+    public void ShowLevelCompleteMenu()
+    {
+        if (!EndLevel()) return;
+        SetPanelActive(levelCompleteMenu, true);
+    }
+
+    // Returns false if the level already ended, so win and fail can't both show.
+    bool EndLevel()
+    {
+        if (IsLevelOver) return false;
+
+        IsLevelOver = true;
+        IsPaused = false;
+        Time.timeScale = 0f;
+        SetPanelActive(pauseMenu, false);
+        return true;
+    }
+
+    static void SetPanelActive(GameObject panel, bool active)
+    {
+        if (panel != null) panel.SetActive(active);
+    }
 }

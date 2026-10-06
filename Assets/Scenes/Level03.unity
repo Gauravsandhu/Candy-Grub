@@ -3047,7 +3047,7 @@ MonoBehaviour:
   barrelTransform: {fileID: 899495150}
   maxRightAngle: -80
   maxLeftAngle: 20
-  desiredPeriod: 7
+  desiredPeriod: 3.5
 --- !u!114 &899495152
 MonoBehaviour:
   m_ObjectHideFlags: 0

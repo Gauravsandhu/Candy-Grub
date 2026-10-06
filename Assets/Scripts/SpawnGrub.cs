@@ -1,25 +1,23 @@
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 public class SpawnGrub : MonoBehaviour
 {
-
-
-    
     [SerializeField] private GameObject grubPrefab;
     [SerializeField] private Transform muzzle;
-    private bool grubAlreadyLaunched = false;
-    public float firePower = 13f;
     [SerializeField] private MainMenu mainMenu; // drag MainCamera into this slot in Inspector
+    public float firePower = 13f;
+
+    private bool grubAlreadyLaunched = false;
 
     void Start()
     {
         Star.i = 0;
     }
+
     void Update()
-{
-    if (!grubAlreadyLaunched)
     {
+        if (grubAlreadyLaunched || !CanFire()) return;
+
         if (Input.GetKeyDown(KeyCode.Space))
         {
             GameObject grub = Instantiate(grubPrefab, muzzle.position, muzzle.rotation);
@@ -27,10 +25,15 @@ public class SpawnGrub : MonoBehaviour
             rb.linearVelocity = muzzle.up * firePower;
             grubAlreadyLaunched = true;
 
-            mainMenu.levelFailScript = grub.GetComponent<LevelFail>();
-            
+            LevelFail levelFail = grub.GetComponent<LevelFail>();
+            if (levelFail != null && mainMenu != null)
+                levelFail.Failed += mainMenu.ShowLevelFailMenu;
         }
     }
-}
 
+    bool CanFire()
+    {
+        if (Time.timeScale == 0f) return false;
+        return mainMenu == null || (!mainMenu.IsPaused && !mainMenu.IsLevelOver);
+    }
 }

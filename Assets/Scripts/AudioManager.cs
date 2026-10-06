@@ -4,25 +4,39 @@ public class AudioManager : MonoBehaviour
 {
     public static AudioManager instance;
     [SerializeField] private AudioSource sfxSource;
-    public AudioClip clip;
+    [SerializeField] private AudioSource musicSource;
+    public AudioClip clip; // background music
 
     void Awake()
     {
-         if (instance == null)
-    {
+        if (instance != null && instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+
         instance = this;
         DontDestroyOnLoad(gameObject);
-    }
-    else
-    {
-        Destroy(gameObject);
+
+        if (musicSource == null)
+            musicSource = gameObject.AddComponent<AudioSource>();
+
+        PlayMusic(clip);
     }
 
-    PlaySFX(clip);
+    public void PlayMusic(AudioClip music)
+    {
+        if (music == null) return;
+
+        musicSource.clip = music;
+        musicSource.loop = true;
+        musicSource.playOnAwake = false;
+        musicSource.Play();
     }
 
-    public void PlaySFX(AudioClip clip)
+    public void PlaySFX(AudioClip sfx)
     {
-        sfxSource.PlayOneShot(clip);
+        if (sfx == null || sfxSource == null) return;
+        sfxSource.PlayOneShot(sfx);
     }
 }

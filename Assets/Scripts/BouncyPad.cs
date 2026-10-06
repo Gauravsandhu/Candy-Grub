@@ -8,8 +8,9 @@ public class BouncyPad : MonoBehaviour
     {
         if (collision.collider.CompareTag("Grub"))
         {
-            Rigidbody2D rb = collision.collider.GetComponent<Rigidbody2D>();
-            rb.linearVelocity = (Vector2)transform.right * bounceForce;
+            Rigidbody2D rb = collision.rigidbody;
+            if (rb != null)
+                rb.linearVelocity = (Vector2)transform.right * bounceForce;
         }
     }
 }
