@@ -1,22 +1,22 @@
 using UnityEngine;
 
+// Basket floor: the grub landing here ends the level.
 public class LevelComplete : MonoBehaviour
 {
-    public MainMenu mainMenu;
-
     void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.collider.CompareTag("Grub"))
+        if (!collision.collider.CompareTag("Grub")) return;
+
+        LevelManager level = LevelManager.Instance;
+        if (level != null)
         {
-            if (Star.i >= 1)
+            level.ReachBasket();
+            if (level.CurrentState == LevelManager.State.Won)
             {
-                mainMenu.ShowLevelCompleteMenu();
+                LevelEffects.Sparkle(collision.transform.position);
+                LevelEffects.Shake(0.15f);
             }
-            else
-            {
-                mainMenu.ShowLevelFailMenu();
-            }
-            Destroy(collision.gameObject);
         }
+        Destroy(collision.gameObject);
     }
 }

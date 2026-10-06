@@ -119,7 +119,7 @@ Rigidbody2D:
   m_ExcludeLayers:
     serializedVersion: 2
     m_Bits: 0
-  m_Interpolate: 0
+  m_Interpolate: 1
   m_SleepingMode: 1
   m_CollisionDetection: 1
   m_Constraints: 0
@@ -173,7 +173,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: '::'
   stationaryThreshold: 1
   velocityThreshold: 0.1
-  failed: 0
+  outOfBoundsMargin: 2
 --- !u!95 &4435832779217404728
 Animator:
   serializedVersion: 7
