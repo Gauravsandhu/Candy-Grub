@@ -1,6 +1,6 @@
-using System;
 using UnityEngine;
 
+// On the grub: reports it as lost when it stops moving or leaves the screen.
 public class LevelFail : MonoBehaviour
 {
     public float stationaryThreshold = 1f;
@@ -8,12 +8,10 @@ public class LevelFail : MonoBehaviour
     // How far past the camera edges the grub may go before it counts as lost.
     public float outOfBoundsMargin = 2f;
 
-    public bool failed = false;
-    public event Action Failed;
-
     private Rigidbody2D rb;
     private Camera cam;
     private float stationaryTimer = 0f;
+    private bool failed = false;
 
     void Start()
     {
@@ -63,7 +61,8 @@ public class LevelFail : MonoBehaviour
         if (failed) return;
 
         failed = true;
-        Failed?.Invoke();
+        if (LevelManager.Instance != null)
+            LevelManager.Instance.GrubLost();
         Destroy(gameObject);
     }
 }

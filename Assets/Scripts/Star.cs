@@ -1,35 +1,43 @@
+using System.Collections;
 using UnityEngine;
 
 public class Star : MonoBehaviour
 {
-    public GameObject[] destination = new GameObject[3];
-    public static int i  = 0;
+    [SerializeField] private float flyDuration = 0.4f;
 
     private bool collected = false;
-
-    void Start()
-    {
-        i = 0;
-    }
 
     void OnTriggerEnter2D(Collider2D other)
     {
         if (collected || !other.CompareTag("Grub")) return;
 
+        LevelManager level = LevelManager.Instance;
+        if (level == null || level.IsLevelOver) return;
+
         collected = true;
-        // Stop the star from being picked up again at its placeholder.
+        // Stop the star from being picked up again at its slot.
         Collider2D col = GetComponent<Collider2D>();
         if (col != null) col.enabled = false;
 
-        MoveStarToDestination(destination);
-        i++;
+        Transform slot = level.CollectStar();
+        if (slot != null)
+            StartCoroutine(FlyTo(slot.position));
     }
 
-    void MoveStarToDestination(GameObject[] destination)
+    IEnumerator FlyTo(Vector3 target)
     {
-        if (i >= destination.Length || destination[i] == null) return;
+        Vector3 start = transform.position;
+        Vector3 baseScale = transform.localScale;
 
-        Vector2 pos = destination[i].transform.position;
-        gameObject.transform.position = pos;
+        for (float t = 0f; t < 1f; t += Time.deltaTime / flyDuration)
+        {
+            float eased = 1f - Mathf.Pow(1f - t, 3f);
+            transform.position = Vector3.Lerp(start, target, eased);
+            transform.localScale = baseScale * (1f + 0.4f * Mathf.Sin(t * Mathf.PI));
+            yield return null;
+        }
+
+        transform.position = target;
+        transform.localScale = baseScale;
     }
 }

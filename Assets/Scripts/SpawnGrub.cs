@@ -1,39 +1,58 @@
 using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.InputSystem;
 
 public class SpawnGrub : MonoBehaviour
 {
     [SerializeField] private GameObject grubPrefab;
     [SerializeField] private Transform muzzle;
-    [SerializeField] private MainMenu mainMenu; // drag MainCamera into this slot in Inspector
     public float firePower = 13f;
 
-    private bool grubAlreadyLaunched = false;
+    private Controls controls;
 
-    void Start()
+    void Awake()
     {
-        Star.i = 0;
+        controls = new Controls();
+    }
+
+    void OnEnable()
+    {
+        controls.Player1.Enable();
+    }
+
+    void OnDisable()
+    {
+        controls.Player1.Disable();
+    }
+
+    void OnDestroy()
+    {
+        controls.Dispose();
     }
 
     void Update()
     {
-        if (grubAlreadyLaunched || !CanFire()) return;
+        LevelManager level = LevelManager.Instance;
+        if (level == null || !level.CanLaunch) return;
 
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            GameObject grub = Instantiate(grubPrefab, muzzle.position, muzzle.rotation);
-            Rigidbody2D rb = grub.GetComponent<Rigidbody2D>();
-            rb.linearVelocity = muzzle.up * firePower;
-            grubAlreadyLaunched = true;
+        InputAction shoot = controls.Player1.Shoot;
+        if (!shoot.WasPressedThisFrame()) return;
 
-            LevelFail levelFail = grub.GetComponent<LevelFail>();
-            if (levelFail != null && mainMenu != null)
-                levelFail.Failed += mainMenu.ShowLevelFailMenu;
-        }
+        // Ignore clicks and taps on UI such as the pause button.
+        if (shoot.activeControl?.device is Pointer && IsPointerOverUI()) return;
+
+        Launch(level);
     }
 
-    bool CanFire()
+    void Launch(LevelManager level)
     {
-        if (Time.timeScale == 0f) return false;
-        return mainMenu == null || (!mainMenu.IsPaused && !mainMenu.IsLevelOver);
+        GameObject grub = Instantiate(grubPrefab, muzzle.position, muzzle.rotation);
+        grub.GetComponent<Rigidbody2D>().linearVelocity = muzzle.up * firePower;
+        level.NotifyLaunched();
+    }
+
+    static bool IsPointerOverUI()
+    {
+        return EventSystem.current != null && EventSystem.current.IsPointerOverGameObject();
     }
 }
