@@ -152,6 +152,7 @@ MonoBehaviour:
   winClip: {fileID: 8300000, guid: 83488edb14d9648d1b40687ebd4e86fe, type: 3}
   failClip: {fileID: 8300000, guid: d9f0db5a6590040c48f743123dd75d38, type: 3}
   clickClip: {fileID: 8300000, guid: 7a34f038414494f06867d14e9e9f0113, type: 3}
+  portalClip: {fileID: 8300000, guid: b1053481beeda40c78f6b4b1f3ad8410, type: 3}
 --- !u!82 &3185077667559760603
 AudioSource:
   m_ObjectHideFlags: 0

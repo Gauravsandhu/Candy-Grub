@@ -41,9 +41,12 @@ public class TrajectoryPreview : MonoBehaviour
         }
     }
 
+    // The dots belong to the scene and are unloaded with it. Destroying them from OnDestroy
+    // during a scene unload can deadlock the Unity 6.5 editor, so only clean up mid-scene.
     void OnDestroy()
     {
-        if (dotRoot != null) Destroy(dotRoot.gameObject);
+        if (dotRoot != null && gameObject.scene.isLoaded)
+            Destroy(dotRoot.gameObject);
     }
 
     void LateUpdate()

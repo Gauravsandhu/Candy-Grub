@@ -52,7 +52,7 @@ public class LevelManager : MonoBehaviour
     {
         if (IsLevelOver) return null;
 
-        Transform slot = StarsCollected < starSlots.Length ? starSlots[StarsCollected] : null;
+        Transform slot = starSlots != null && StarsCollected < starSlots.Length ? starSlots[StarsCollected] : null;
         StarsCollected++;
         StarCollected?.Invoke(StarsCollected);
         return slot;

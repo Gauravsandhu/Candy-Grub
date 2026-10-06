@@ -23,6 +23,8 @@ public static class SaveSystem
 
     public static void RecordLevelComplete(int buildIndex, int stars)
     {
+        // Only real levels are saved; the main menu and unsaved scenes are ignored.
+        if (buildIndex < 1) return;
         if (IsCompleted(buildIndex) && stars <= GetBestStars(buildIndex)) return;
 
         PlayerPrefs.SetInt(StarsKeyPrefix + buildIndex, stars);

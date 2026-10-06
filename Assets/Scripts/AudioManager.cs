@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public enum Sfx { Fire, Bounce, Star, Win, Fail, Click }
+public enum Sfx { Fire, Bounce, Star, Win, Fail, Click, Portal }
 
 // Persists across scenes. Plays looping music and one-shot sound effects,
 // and stores the music and SFX volumes in PlayerPrefs.
@@ -24,6 +24,7 @@ public class AudioManager : MonoBehaviour
     [SerializeField] private AudioClip winClip;
     [SerializeField] private AudioClip failClip;
     [SerializeField] private AudioClip clickClip;
+    [SerializeField] private AudioClip portalClip;
 
     private float musicVolume = 1f;
     private float sfxVolume = 1f;
@@ -116,6 +117,7 @@ public class AudioManager : MonoBehaviour
             case Sfx.Win: return winClip;
             case Sfx.Fail: return failClip;
             case Sfx.Click: return clickClip;
+            case Sfx.Portal: return portalClip;
             default: return null;
         }
     }
