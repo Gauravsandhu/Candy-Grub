@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 8420451310516112819}
   - component: {fileID: 7869498904649620540}
   - component: {fileID: 2025982371920780958}
-  - component: {fileID: 4595774004989113839}
+  - component: {fileID: 2645260616620085236}
   m_Layer: 0
   m_Name: Cannon
   m_TagString: Untagged
@@ -158,7 +158,7 @@ MonoBehaviour:
   recoilTarget: {fileID: 0}
   recoilScale: {x: 1.15, y: 0.85}
   recoilDuration: 0.15
---- !u!114 &4595774004989113839
+--- !u!114 &2645260616620085236
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -173,7 +173,7 @@ MonoBehaviour:
   dotSprite: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
   dotCount: 6
   secondsBetweenDots: 0.08
-  dotSize: 0.18
+  dotSize: 0.36
   dotColor: {r: 1, g: 1, b: 1, a: 0.85}
   sortingOrder: 50
 --- !u!1 &8285860854510054996

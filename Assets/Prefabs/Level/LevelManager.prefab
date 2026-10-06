@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4324132793066337494}
   - component: {fileID: 2741623830065097573}
-  - component: {fileID: 1392969806045987751}
+  - component: {fileID: 7365108585125964503}
   m_Layer: 0
   m_Name: LevelManager
   m_TagString: Untagged
@@ -47,7 +47,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::LevelManager
   starSlots: []
   starsToWin: 1
---- !u!114 &1392969806045987751
+--- !u!114 &7365108585125964503
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -59,6 +59,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 88d09ef71388349429e613fb0d61d6a0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LevelEffects
-  sparklePrefab: {fileID: 5284392542746394348, guid: 5634c9d812603407e9e2511819876628, type: 3}
-  puffPrefab: {fileID: 3231604633154343554, guid: bafb197817ab44f02862587792688cc6, type: 3}
+  sparklePrefab: {fileID: 8562695352853943103, guid: 5634c9d812603407e9e2511819876628, type: 3}
+  puffPrefab: {fileID: 4364916636228298874, guid: bafb197817ab44f02862587792688cc6, type: 3}
   shakeDuration: 0.2

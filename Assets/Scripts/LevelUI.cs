@@ -12,7 +12,7 @@ public class LevelUI : MonoBehaviour
     [SerializeField] private GameObject pauseMenu;
     [SerializeField] private GameObject levelCompleteMenu;
     [SerializeField] private GameObject levelFailMenu;
-    [SerializeField] private GameObject optionsPanel;
+    [SerializeField] private OptionsMenu options;
 
     [Header("HUD")]
     [SerializeField] private TMP_Text levelTitle;
@@ -75,8 +75,8 @@ public class LevelUI : MonoBehaviour
         if (level == null || !controls.Player1.Pause.WasPressedThisFrame()) return;
 
         // Esc backs out of the options panel before it unpauses.
-        if (optionsPanel != null && optionsPanel.activeSelf)
-            CloseOptions();
+        if (options != null && options.IsOpen)
+            options.Close();
         else
             level.SetPaused(!level.IsPaused);
     }
@@ -87,8 +87,16 @@ public class LevelUI : MonoBehaviour
     public void Restart() => SceneLoader.Restart();
     public void NextLevel() => SceneLoader.LoadNextLevel();
     public void GoToMainMenu() => SceneLoader.LoadMainMenu();
-    public void OpenOptions() => SetActive(optionsPanel, true);
-    public void CloseOptions() => SetActive(optionsPanel, false);
+
+    public void OpenOptions()
+    {
+        if (options == null) return;
+
+        GameObject current = pauseMenu != null && pauseMenu.activeSelf ? pauseMenu
+            : levelFailMenu != null && levelFailMenu.activeSelf ? levelFailMenu
+            : null;
+        options.Open(current);
+    }
 
     void OnPauseChanged(bool paused) => ShowOnly(paused ? pauseMenu : null);
 
@@ -145,7 +153,7 @@ public class LevelUI : MonoBehaviour
         SetActive(pauseMenu, panel == pauseMenu);
         SetActive(levelCompleteMenu, panel == levelCompleteMenu);
         SetActive(levelFailMenu, panel == levelFailMenu);
-        SetActive(optionsPanel, false);
+        if (options != null) options.Hide();
         SetActive(pauseButton, panel == null);
     }
 

@@ -8,7 +8,7 @@ public class TrajectoryPreview : MonoBehaviour
     [SerializeField] private Sprite dotSprite;
     [SerializeField] private int dotCount = 6;
     [SerializeField] private float secondsBetweenDots = 0.08f;
-    [SerializeField] private float dotSize = 0.18f;
+    [SerializeField] private float dotSize = 0.36f;
     [SerializeField] private Color dotColor = new Color(1f, 1f, 1f, 0.85f);
     [SerializeField] private int sortingOrder = 50;
 

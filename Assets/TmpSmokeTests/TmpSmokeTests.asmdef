@@ -1,9 +1,0 @@
-{
-    "name": "TmpSmokeTests",
-    "references": ["UnityEngine.TestRunner", "UnityEditor.TestRunner", "Unity.TextMeshPro", "UnityEngine.UI"],
-    "includePlatforms": [],
-    "defineConstraints": ["UNITY_INCLUDE_TESTS"],
-    "overrideReferences": true,
-    "precompiledReferences": ["nunit.framework.dll"],
-    "autoReferenced": false
-}
