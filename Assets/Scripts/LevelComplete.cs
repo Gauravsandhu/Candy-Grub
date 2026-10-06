@@ -7,8 +7,16 @@ public class LevelComplete : MonoBehaviour
     {
         if (!collision.collider.CompareTag("Grub")) return;
 
-        if (LevelManager.Instance != null)
-            LevelManager.Instance.ReachBasket();
+        LevelManager level = LevelManager.Instance;
+        if (level != null)
+        {
+            level.ReachBasket();
+            if (level.CurrentState == LevelManager.State.Won)
+            {
+                LevelEffects.Sparkle(collision.transform.position);
+                LevelEffects.Shake(0.15f);
+            }
+        }
         Destroy(collision.gameObject);
     }
 }

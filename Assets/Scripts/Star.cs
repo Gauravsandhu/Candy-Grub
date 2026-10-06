@@ -19,6 +19,9 @@ public class Star : MonoBehaviour
         Collider2D col = GetComponent<Collider2D>();
         if (col != null) col.enabled = false;
 
+        AudioManager.Play(Sfx.Star);
+        LevelEffects.Sparkle(transform.position);
+
         Transform slot = level.CollectStar();
         if (slot != null)
             StartCoroutine(FlyTo(slot.position));
